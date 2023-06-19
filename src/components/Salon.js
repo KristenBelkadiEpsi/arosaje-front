@@ -4,21 +4,23 @@ const socketioClient = require("socket.io-client");
 
 export function Salon() {
   let client = socketioClient.io("ws://localhost:8000");
-  let messages = useState([]);
-  let saisieUtilisateur = useState("");
+  let [messages, setMessages] = useState([]);
+  let [saisie, setSaisie] = useState("");
   client.on("connection", (socket) => {
     console.log("connecté au serveur");
   });
 
   client.on("messages", (msg) => {
-    messages.push(<p>{msg}</p>);
+    let tmp = messages;
+    tmp.push(<p>{msg}</p>)
+    setMessages(tmp)
   });
 
   return (
     <div>
-      <textarea id="affichageChat">{messages[1]}</textarea>
-      <textField>{saisieUtilisateur}</textField>
-      <button onClick={() => client.emit("message", saisieUtilisateur)}></button>
+      <textarea id="affichageChat">{messages}</textarea>
+      <textfield name="saisieUtilisateur" onChange={(event) => setSaisie(event.target.value)}>{saisie}</textfield>
+      <button onClick={() => {client.emit("message", saisie)}}></button>
     </div>
   );
 }
