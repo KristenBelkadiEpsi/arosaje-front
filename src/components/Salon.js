@@ -1,26 +1,25 @@
-import { useState } from "react";
-
-const socketioClient = require("socket.io-client");
-
+import { useState, useEffect } from "react";
+/* import { socket } from "../socket"; */
+import io from "socket.io-client"
 export function Salon() {
-  let client = socketioClient.io("ws://localhost:8000");
-  let [messages, setMessages] = useState([]);
-  let [saisie, setSaisie] = useState("");
-  client.on("connection", (socket) => {
-    console.log("connecté au serveur");
-  });
+  const [historiqueMessage, setHistoriqueMessage] = useState("")
+  const [socket, setSocket] = useState(null)
+  const [saisie, setSaisie] = useState("");
+  useEffect(() => {
+    if (socket === null) {
+      setSocket(io("http://127.0.0.1:4000"))
+    } else {
 
-  client.on("messages", (msg) => {
-    let tmp = messages;
-    tmp.push(<p>{msg}</p>)
-    setMessages(tmp)
-  });
-
-  return (
-    <div>
-      <textarea id="affichageChat">{messages}</textarea>
-      <textfield name="saisieUtilisateur" onChange={(event) => setSaisie(event.target.value)}>{saisie}</textfield>
-      <button onClick={() => {client.emit("message", saisie)}}></button>
-    </div>
-  );
+      socket.on("message", msg => {
+        console.log("nouveau message")
+        setHistoriqueMessage(msg + "\r\n")
+        console.log(historiqueMessage)
+      })
+    }
+  }, [socket, historiqueMessage, saisie])
+  return (<div>
+    <input onChange={(event) => setSaisie(event.target.value)}></input>
+    <button onClick={() => { console.log("envoie du message"); socket.emit("message", saisie) }}>envoyer</button>
+    <textarea value={historiqueMessage}></textarea>
+  </div>)
 }
