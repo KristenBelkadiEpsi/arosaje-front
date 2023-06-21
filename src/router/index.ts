@@ -1,6 +1,6 @@
 import { createRouter, createWebHashHistory, RouteRecordRaw } from "vue-router";
 import HomeView from "../views/HomeView.vue";
-
+import ChatView from "../views/ChatView.vue";
 const routes: Array<RouteRecordRaw> = [
   {
     path: "/",
@@ -16,6 +16,12 @@ const routes: Array<RouteRecordRaw> = [
     component: () =>
       import(/* webpackChunkName: "about" */ "../views/AboutView.vue"),
   },
+  {
+    path: "/chat",
+    name: "chat",
+    component: ChatView,
+
+  }
 ];
 
 const router = createRouter({
