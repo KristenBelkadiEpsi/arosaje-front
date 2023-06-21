@@ -71,10 +71,20 @@ export default defineComponent({
     },
 
     login() {
-      // Perform login logic here
-      console.log("Username:", this.username);
-      console.log("Email:", this.email);
-      console.log("Password:", this.password);
+      axios.request({
+        method: 'get',
+        maxBodyLength: Infinity,
+        url: 'http://localhost:5000/api/login',
+        headers: {
+          'username': this.newUsername,
+          'password': this.newPassword
+        }
+      }).then((reponse) => {
+        console.log(reponse.data)
+        this.clearFields()
+        /* app.config.globalProperties.$user =  */
+      })
+
       // You can make an API call or perform any other actions as needed
     },
 
@@ -88,6 +98,8 @@ export default defineComponent({
           'password': this.newPassword,
           'email': this.newEmail
         }
+      }).then(() => {
+        this.clearFields()
       }).catch(error => {
         console.log(error.response.data)
       })
