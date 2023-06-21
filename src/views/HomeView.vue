@@ -84,9 +84,9 @@ export default defineComponent({
         maxBodyLength: Infinity,
         url: 'http://localhost:5000/api/register',
         headers: {
-          'username': 'kristen',
-          'password': 'Password1234',
-          'email': 'kristen.belkadi@epsi.fr'
+          'username': this.newUsername,
+          'password': this.newPassword,
+          'email': this.newEmail
         }
       }).catch(error => {
         console.log(error.response.data)
