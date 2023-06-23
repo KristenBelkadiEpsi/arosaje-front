@@ -39,7 +39,7 @@
 <script lang="ts">
 import axios from "axios";
 import { defineComponent } from "vue";
-
+import config from "../config"
 export default defineComponent({
   name: "HomeView",
 
@@ -76,11 +76,14 @@ export default defineComponent({
         maxBodyLength: Infinity,
         url: 'http://localhost:5000/api/login',
         headers: {
-          'username': this.newUsername,
-          'password': this.newPassword
+          'username': this.username,
+          'password': this.password
         }
       }).then((reponse) => {
+
         console.log(reponse.data)
+        config.login = this.newUsername;
+        config.email = this.newEmail;
         this.clearFields()
         /* app.config.globalProperties.$user =  */
       })
@@ -89,6 +92,7 @@ export default defineComponent({
     },
 
     register() {
+
       axios.request({
         method: 'post',
         maxBodyLength: Infinity,
@@ -99,6 +103,7 @@ export default defineComponent({
           'email': this.newEmail
         }
       }).then(() => {
+
         this.clearFields()
       }).catch(error => {
         console.log(error.response.data)
