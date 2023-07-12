@@ -1,57 +1,79 @@
 <template>
-  <div class="login-container">
-    <h2>Login</h2>
+  <div class="login-container" v-if="!isLogin">
+    <h2>{{ isRegistering ? "register" : "login" }}</h2>
     <form v-if="!isRegistering" @submit.prevent="login">
       <div class="form-group">
         <label for="username">Username</label>
-        <input type="text" id="username" v-model="username" required>
+        <input type="text" id="username" v-model="saisiePseudo" required />
       </div>
       <div class="form-group">
         <label for="email">Email</label>
-        <input type="email" id="email" v-model="email" required>
+        <input type="email" id="email" v-model="saisieEmail" required />
       </div>
       <div class="form-group">
         <label for="password">Password</label>
-        <input type="password" id="password" v-model="password" required>
+        <input
+          type="password"
+          id="password"
+          v-model="saisieMotdepasse"
+          required
+        />
       </div>
       <button type="submit">Login</button>
-      <p class="register-link" @click="toggleRegistering">Don't have an account? Register here</p>
+      <p class="register-link" @click="toggleRegistering">
+        Don't have an account? Register here
+      </p>
     </form>
     <form v-else @submit.prevent="register">
       <div class="form-group">
         <label for="newUsername">Username</label>
-        <input type="text" id="newUsername" v-model="newUsername" required>
+        <input type="text" id="newUsername" v-model="saisiePseudo" required />
       </div>
       <div class="form-group">
         <label for="newEmail">Email</label>
-        <input type="email" id="newEmail" v-model="newEmail" required>
+        <input type="email" id="newEmail" v-model="saisieEmail" required />
       </div>
       <div class="form-group">
         <label for="newPassword">Password</label>
-        <input type="password" id="newPassword" v-model="newPassword" required>
+        <input
+          type="password"
+          id="newPassword"
+          v-model="saisieMotdepasse"
+          required
+        />
       </div>
       <button type="submit">Register</button>
-      <p class="register-link" @click="toggleRegistering">Already have an account? Login here</p>
+      <p class="register-link" @click="toggleRegistering">
+        Already have an account? Login here
+      </p>
     </form>
+  </div>
+  <div v-else>
+    <PlantesView :username="username" :password="password" :email="email"></PlantesView>
   </div>
 </template>
 
 <script lang="ts">
 import axios from "axios";
 import { defineComponent } from "vue";
+import App from "../App.vue";
+import PlantesView from "./PlantesView.vue";
 
 export default defineComponent({
   name: "HomeView",
+  components: { PlantesView },
 
   data() {
     return {
+      listeImages: [],
       isRegistering: false,
+      isLogin: false,
       username: "",
       email: "",
       password: "",
-      newUsername: "",
-      newEmail: "",
-      newPassword: ""
+      saisiePseudo: "",
+      saisieEmail: "",
+      saisieMotdepasse: ""
     };
   },
 
@@ -65,46 +87,57 @@ export default defineComponent({
       this.username = "";
       this.email = "";
       this.password = "";
-      this.newUsername = "";
-      this.newEmail = "";
-      this.newPassword = "";
+      this.saisiePseudo = "";
+      this.saisieEmail = "";
+      this.saisieMotdepasse = "";
     },
 
     login() {
-      axios.request({
-        method: 'get',
-        maxBodyLength: Infinity,
-        url: 'http://localhost:5000/api/login',
-        headers: {
-          'username': this.newUsername,
-          'password': this.newPassword
-        }
-      }).then((reponse) => {
-        console.log(reponse.data)
-        this.clearFields()
-        /* app.config.globalProperties.$user =  */
-      })
+      axios
+        .request({
+          method: "get",
+          maxBodyLength: Infinity,
+          url: "http://localhost:5000/api/login",
+          headers: {
+            username: this.saisiePseudo,
+            password: this.saisieMotdepasse,
+            email: this.saisieEmail
+          }
+        })
+        .then((reponse) => {
+          this.isLogin = true;
+          console.log(App.config.globalProperties.$pseudo);
+          // this.$pseudo = reponse.data.response.data.nom;
+          console.log(reponse.data);
+
+          this.clearFields();
+          /* app.config.globalProperties.$user =  */
+        })
+        .catch((error) => {
+          console.log(error.message);
+        });
 
       // You can make an API call or perform any other actions as needed
     },
 
     register() {
-      axios.request({
-        method: 'post',
-        maxBodyLength: Infinity,
-        url: 'http://localhost:5000/api/register',
-        headers: {
-          'username': this.newUsername,
-          'password': this.newPassword,
-          'email': this.newEmail
-        }
-      }).then(() => {
-        this.clearFields()
-      }).catch(error => {
-        console.log(error.response.data)
-      })
-
-
+      axios
+        .request({
+          method: "post",
+          maxBodyLength: Infinity,
+          url: "http://localhost:5000/api/register",
+          headers: {
+            username: this.saisiePseudo,
+            password: this.saisieMotdepasse,
+            email: this.saisieEmail
+          }
+        })
+        .then(() => {
+          this.clearFields();
+        })
+        .catch((error) => {
+          console.log(error.response.data);
+        });
     }
   }
 });

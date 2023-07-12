@@ -2,9 +2,9 @@
   <v-app>
     <v-main>
       <div class="navigation">
-        <router-link to="/" class="nav-link">Home</router-link>
-        <span class="separator">|</span>
-        <router-link to="/chat" class="nav-link">Chat</router-link>
+<!--        <router-link to="/" class="nav-link">Home</router-link>-->
+<!--        <span class="separator">|</span>-->
+<!--        <router-link to="/chat" class="nav-link">Chat</router-link>-->
       </div>
       <router-view />
     </v-main>
@@ -38,7 +38,6 @@
   font-weight: bold;
 }
 </style>
-
 
 <script lang="ts">
 import { defineComponent } from "vue";
