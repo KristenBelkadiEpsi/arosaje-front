@@ -49,7 +49,11 @@
     </form>
   </div>
   <div v-else>
-    <PlantesView :username="username" :password="password" :email="email"></PlantesView>
+    <PlantesView
+      :username="username"
+      :password="password"
+      :email="email"
+    ></PlantesView>
   </div>
 </template>
 
@@ -73,7 +77,7 @@ export default defineComponent({
       password: "",
       saisiePseudo: "",
       saisieEmail: "",
-      saisieMotdepasse: ""
+      saisieMotdepasse: "",
     };
   },
 
@@ -101,8 +105,8 @@ export default defineComponent({
           headers: {
             username: this.saisiePseudo,
             password: this.saisieMotdepasse,
-            email: this.saisieEmail
-          }
+            email: this.saisieEmail,
+          },
         })
         .then((reponse) => {
           this.isLogin = true;
@@ -129,8 +133,8 @@ export default defineComponent({
           headers: {
             username: this.saisiePseudo,
             password: this.saisieMotdepasse,
-            email: this.saisieEmail
-          }
+            email: this.saisieEmail,
+          },
         })
         .then(() => {
           this.clearFields();
@@ -138,8 +142,8 @@ export default defineComponent({
         .catch((error) => {
           console.log(error.response.data);
         });
-    }
-  }
+    },
+  },
 });
 </script>
 

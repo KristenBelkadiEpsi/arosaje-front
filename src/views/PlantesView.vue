@@ -47,11 +47,11 @@ export default defineComponent({
   props: {
     username: String,
     password: String,
-    email: String
+    email: String,
   },
   data() {
     return {
-      plantes: []
+      plantes: [],
     };
   },
   mounted() {
@@ -59,14 +59,13 @@ export default defineComponent({
       .request({
         method: "get",
         maxBodyLength: Infinity,
-        url: "http://localhost:5000/api/listePlantes"
+        url: "http://localhost:5000/api/listePlantes",
       })
       .then((reponse) => {
         this.plantes = reponse.data;
       });
-  }
+  },
 });
-
 </script>
 
 <style scoped>
